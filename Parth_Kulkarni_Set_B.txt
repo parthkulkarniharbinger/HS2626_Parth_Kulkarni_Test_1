@@ -1,0 +1,709 @@
+1) MongoDB:
+
+Case Study: Social Media Application
+
+Scenario:
+You are part of a team developing a social media application that allows users to create profiles, connect with friends, and share posts. The application needs a robust database solution to handle the growing user base and store various types of data efficiently.
+
+Requirements:
+1. The database should store user profiles with attributes like name, username, email, date of birth, and a unique identifier.
+2. Users should be able to follow/unfollow other users and maintain a list of their followers and followed users.
+3. Posts should be stored with attributes like content, timestamp, and the user who posted it.
+4. Users should be able to like and comment on posts.
+5. The database should support efficient retrieval of posts by user, displaying the posts in reverse chronological order.
+6. Implement a feature that suggests friends to users based on common interests and connections.
+7. The database should ensure data integrity and consistency, even during concurrent read and write operations.
+
+Tasks:
+Q1. Design the MongoDB database schema to store user profiles, posts, and relationships between users.
+ans:
+db.createCollection("followers")
+db.followers.createIndex({ "id": 1 }, { unique: true })
+db.followers.insertMany([
+  {
+    "id": 1,
+    "name": "John Doe",
+    "username": "johndoe",
+    "email": "john.doe@example.com",
+    "DOB": "1990-01-01",
+    "relationship_status": "single",
+    "followers": 3,
+    "following": 5
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "username": "janesmith",
+    "email": "jane.smith@example.com",
+    "DOB": "1992-05-10",
+    "relationship_status": "married",
+    "followers": 2,
+    "following": 7
+  },
+  {
+    "id": 3,
+    "name": "Alice Johnson",
+    "username": "alicej",
+    "email": "alice.johnson@example.com",
+    "DOB": "1988-11-20",
+    "relationship_status": "single",
+    "followers": 4,
+    "following": 6
+  },
+  {
+    "id": 4,
+    "name": "Michael Brown",
+    "username": "michaelb",
+    "email": "michael.brown@example.com",
+    "DOB": "1995-03-15",
+    "relationship_status": "single",
+    "followers": 1,
+    "following": 4
+  },
+  {
+    "id": 5,
+    "name": "Emily Wilson",
+    "username": "emilyw",
+    "email": "emily.wilson@example.com",
+    "DOB": "1993-07-08",
+    "relationship_status": "married",
+    "followers": 5,
+    "following": 3
+  },
+  {
+    "id": 6,
+    "name": "David Lee",
+    "username": "davidl",
+    "email": "david.lee@example.com",
+    "DOB": "1991-09-25",
+    "relationship_status": "single",
+    "followers": 3,
+    "following": 7
+  },
+  {
+    "id": 7,
+    "name": "Sarah Miller",
+    "username": "sarahm",
+    "email": "sarah.miller@example.com",
+    "DOB": "1994-04-12",
+    "relationship_status": "single",
+    "followers": 2,
+    "following": 6
+  },
+  {
+    "id": 8,
+    "name": "Matthew Taylor",
+    "username": "matthewt",
+    "email": "matthew.taylor@example.com",
+    "DOB": "1992-02-18",
+    "relationship_status": "single",
+    "followers": 4,
+    "following": 5
+  },
+  {
+    "id": 9,
+    "name": "Olivia Anderson",
+    "username": "oliviaa",
+    "email": "olivia.anderson@example.com",
+    "DOB": "1996-06-30",
+    "relationship_status": "single",
+    "followers": 6,
+    "following": 3
+  },
+  {
+    "id": 10,
+    "name": "Daniel Thomas",
+    "username": "danielt",
+    "email": "daniel.thomas@example.com",
+    "DOB": "1993-12-04",
+    "relationship_status": "married",
+    "followers": 2,
+    "following": 8
+  }
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("64b2265d46e1b5e4dc965e5d"),
+    '1': ObjectId("64b2265d46e1b5e4dc965e5e"),
+    '2': ObjectId("64b2265d46e1b5e4dc965e5f"),
+    '3': ObjectId("64b2265d46e1b5e4dc965e60"),
+    '4': ObjectId("64b2265d46e1b5e4dc965e61"),
+    '5': ObjectId("64b2265d46e1b5e4dc965e62"),
+    '6': ObjectId("64b2265d46e1b5e4dc965e63"),
+    '7': ObjectId("64b2265d46e1b5e4dc965e64"),
+    '8': ObjectId("64b2265d46e1b5e4dc965e65"),
+    '9': ObjectId("64b2265d46e1b5e4dc965e66")
+  }
+}
+db.createCollection("posts")
+db.posts.createIndex({ "post_id": 1 }, { unique: true })
+db.posts.insertMany([
+  {
+    "post_id": 1,
+    "content": "Hello world!",
+    "likes": 10,
+    "comments": [
+      {
+        "user_id": 2,
+        "comment": "Nice post!"
+      },
+      {
+        "user_id": 3,
+        "comment": "Keep it up!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T09:00:00Z"),
+    "user_id": 1,
+    "username": "John Doe"
+  },
+  {
+    "post_id": 2,
+    "content": "I love MongoDB!",
+    "likes": 15,
+    "comments": [
+      {
+        "user_id": 4,
+        "comment": "Me too!"
+      },
+      {
+        "user_id": 5,
+        "comment": "Great choice!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T10:00:00Z"),
+    "user_id": 2,
+    "username": "Jane Smith"
+  },
+  {
+    "post_id": 3,
+    "content": "Feeling excited today!",
+    "likes": 8,
+    "comments": [
+      {
+        "user_id": 6,
+        "comment": "What's the occasion?"
+      },
+      {
+        "user_id": 7,
+        "comment": "Share your happiness!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T11:00:00Z"),
+    "user_id": 3,
+    "username": "Alice Johnson"
+  },
+  {
+    "post_id": 4,
+    "content": "Enjoying the sunny weather!",
+    "likes": 12,
+    "comments": [
+      {
+        "user_id": 8,
+        "comment": "Wish I could join you!"
+      },
+      {
+        "user_id": 9,
+        "comment": "Beautiful day!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T12:00:00Z"),
+    "user_id": 4,
+    "username": "Michael Brown"
+  },
+  {
+    "post_id": 5,
+    "content": "Exploring new places!",
+    "likes": 20,
+    "comments": [
+      {
+        "user_id": 10,
+        "comment": "Share some pictures!"
+      },
+      {
+        "user_id": 1,
+        "comment": "Can't wait to hear about your adventures!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T13:00:00Z"),
+    "user_id": 5,
+    "username": "Emily Wilson"
+  },
+  {
+    "post_id": 6,
+    "content": "Working on an exciting project!",
+    "likes": 5,
+    "comments": [
+      {
+        "user_id": 2,
+        "comment": "Good luck!"
+      },
+      {
+        "user_id": 3,
+        "comment": "Looking forward to seeing the results!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T14:00:00Z"),
+    "user_id": 6,
+    "username": "David Lee"
+  },
+  {
+    "post_id": 7,
+    "content": "Enjoying a relaxing weekend!",
+    "likes": 9,
+    "comments": [
+      {
+        "user_id": 4,
+        "comment": "You deserve it!"
+      },
+      {
+        "user_id": 5,
+        "comment": "Have a great time!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T15:00:00Z"),
+    "user_id": 7,
+    "username": "Sarah Miller"
+  },
+  {
+    "post_id": 8,
+    "content": "Celebrating a milestone achievement!",
+    "likes": 18,
+    "comments": [
+      {
+        "user_id": 6,
+        "comment": "Congratulations!"
+      },
+      {
+        "user_id": 8,
+        "comment": "Well done!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T16:00:00Z"),
+    "user_id": 8,
+    "username": "Matthew Taylor"
+  },
+  {
+    "post_id": 9,
+    "content": "Spending quality time with family!",
+    "likes": 7,
+    "comments": [
+      {
+        "user_id": 1,
+        "comment": "Family is everything!"
+      },
+      {
+        "user_id": 4,
+        "comment": "Cherish those moments!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T17:00:00Z"),
+    "user_id": 9,
+    "username": "Olivia Anderson"
+  },
+  {
+    "post_id": 10,
+    "content": "Enjoying a delicious meal!",
+    "likes": 14,
+    "comments": [
+      {
+        "user_id": 5,
+        "comment": "What are you eating?"
+      },
+      {
+        "user_id": 6,
+        "comment": "Bon appétit!"
+      }
+    ],
+    "timestamp": ISODate("2023-07-14T18:00:00Z"),
+    "user_id": 10,
+    "username": "Daniel Thomas"
+  }
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("64b2269146e1b5e4dc965e67"),
+    '1': ObjectId("64b2269146e1b5e4dc965e68"),
+    '2': ObjectId("64b2269146e1b5e4dc965e69"),
+    '3': ObjectId("64b2269146e1b5e4dc965e6a"),
+    '4': ObjectId("64b2269146e1b5e4dc965e6b"),
+    '5': ObjectId("64b2269146e1b5e4dc965e6c"),
+    '6': ObjectId("64b2269146e1b5e4dc965e6d"),
+    '7': ObjectId("64b2269146e1b5e4dc965e6e"),
+    '8': ObjectId("64b2269146e1b5e4dc965e6f"),
+    '9': ObjectId("64b2269146e1b5e4dc965e70")
+  }
+}
+db.likes.insertMany([
+  {
+    "like_id": 1,
+    "user_id": 1,
+    "liked_by": "John Doe",
+    "liked_post": {
+      "post_id": 2,
+      "user_id": 2,
+      "username": "Jane Smith",
+      "content": "I love MongoDB!"
+    },
+    "comment": "Great post!",
+    "timestamp": ISODate("2023-07-14T09:30:00Z")
+  },
+  {
+    "like_id": 2,
+    "user_id": 2,
+    "liked_by": "Jane Smith",
+    "liked_post": {
+      "post_id": 4,
+      "user_id": 4,
+      "username": "Michael Brown",
+      "content": "Enjoying the sunny weather!"
+    },
+    "comment": "Beautiful day!",
+    "timestamp": ISODate("2023-07-14T10:15:00Z")
+  },
+  {
+    "like_id": 3,
+    "user_id": 3,
+    "liked_by": "Alice Johnson",
+    "liked_post": {
+      "post_id": 5,
+      "user_id": 5,
+      "username": "Emily Wilson",
+      "content": "Exploring new places!"
+    },
+    "comment": "Looks amazing!",
+    "timestamp": ISODate("2023-07-14T11:45:00Z")
+  },
+  {
+    "like_id": 4,
+    "user_id": 4,
+    "liked_by": "Michael Brown",
+    "liked_post": {
+      "post_id": 1,
+      "user_id": 1,
+      "username": "John Doe",
+      "content": "Hello world!"
+    },
+    "comment": "Nice post!",
+    "timestamp": ISODate("2023-07-14T12:30:00Z")
+  },
+  {
+    "like_id": 5,
+    "user_id": 5,
+    "liked_by": "Emily Wilson",
+    "liked_post": {
+      "post_id": 6,
+      "user_id": 6,
+      "username": "David Lee",
+      "content": "Working on an exciting project!"
+    },
+    "comment": "Impressive work!",
+    "timestamp": ISODate("2023-07-14T13:45:00Z")
+  },
+  {
+    "like_id": 6,
+    "user_id": 6,
+    "liked_by": "David Lee",
+    "liked_post": {
+      "post_id": 8,
+      "user_id": 8,
+      "username": "Matthew Taylor",
+      "content": "Celebrating a milestone achievement!"
+    },
+    "comment": "Congratulations!",
+    "timestamp": ISODate("2023-07-14T14:20:00Z")
+  },
+  {
+    "like_id": 7,
+    "user_id": 7,
+    "liked_by": "Sarah Miller",
+    "liked_post": {
+      "post_id": 10,
+      "user_id": 10,
+      "username": "Daniel Thomas",
+      "content": "Enjoying a delicious meal!"
+    },
+    "comment": "Yum!",
+    "timestamp": ISODate("2023-07-14T15:10:00Z")
+  },
+  {
+    "like_id": 8,
+    "user_id": 8,
+    "liked_by": "Matthew Taylor",
+    "liked_post": {
+      "post_id": 3,
+      "user_id": 3,
+      "username": "Alice Johnson",
+      "content": "Feeling excited today!"
+    },
+    "comment": "Share your happiness!",
+    "timestamp": ISODate("2023-07-14T16:30:00Z")
+  },
+  {
+    "like_id": 9,
+    "user_id": 9,
+    "liked_by": "Olivia Anderson",
+    "liked_post": {
+      "post_id": 7,
+      "user_id": 7,
+      "username": "Sarah Miller",
+      "content": "Enjoying a relaxing weekend!"
+    },
+    "comment": "Have a great time!",
+    "timestamp": ISODate("2023-07-14T17:50:00Z")
+  },
+  {
+    "like_id": 10,
+    "user_id": 10,
+    "liked_by": "Daniel Thomas",
+    "liked_post": {
+      "post_id": 9,
+      "user_id": 9,
+      "username": "Olivia Anderson",
+      "content": "Spending quality time with family!"
+    },
+    "comment": "Family is everything!",
+    "timestamp": ISODate("2023-07-14T18:40:00Z")
+  }
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("64b226ce46e1b5e4dc965e71"),
+    '1': ObjectId("64b226ce46e1b5e4dc965e72"),
+    '2': ObjectId("64b226ce46e1b5e4dc965e73"),
+    '3': ObjectId("64b226ce46e1b5e4dc965e74"),
+    '4': ObjectId("64b226ce46e1b5e4dc965e75"),
+    '5': ObjectId("64b226ce46e1b5e4dc965e76"),
+    '6': ObjectId("64b226ce46e1b5e4dc965e77"),
+    '7': ObjectId("64b226ce46e1b5e4dc965e78"),
+    '8': ObjectId("64b226ce46e1b5e4dc965e79"),
+    '9': ObjectId("64b226ce46e1b5e4dc965e7a")
+  }
+}
+db.interests.insertMany([
+  {
+    "interest": "Technology",
+    "followers": [1, 3, 5]
+  },
+  {
+    "interest": "Travel",
+    "followers": [2, 4, 6]
+  },
+  {
+    "interest": "Fitness",
+    "followers": [1, 3, 5]
+  },
+  {
+    "interest": "Food",
+    "followers": [2, 4, 6]
+  },
+  {
+    "interest": "Art",
+    "followers": [1, 3, 5]
+  }
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("64b22e9346e1b5e4dc965e82"),
+    '1': ObjectId("64b22e9346e1b5e4dc965e83"),
+    '2': ObjectId("64b22e9346e1b5e4dc965e84"),
+    '3': ObjectId("64b22e9346e1b5e4dc965e85"),
+    '4': ObjectId("64b22e9346e1b5e4dc965e86")
+  }
+}
+2. Implement MongoDB queries for the following operations:
+   a. Insert a new user profile into the database.
+    ans: b.followers.insertOne({
+  "name": "John Doe",
+  "username": "johndoe",
+  "email": "john.doe@example.com",
+  "DOB": "1990-01-01",
+  "relationship_status": "single",
+  "followers": 0,
+  "following": 0
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId("64b2270346e1b5e4dc965e7b")
+}
+   b. Retrieve a user's profile information, including their followers and followed users.
+db.followers.aggregate([
+  { $match: { "username": "johndoe" } },
+  {
+    $lookup: {
+      from: "followers",
+      localField: "_id",
+      foreignField: "user_id",
+      as: "followers"
+    }
+  },
+  {
+    $lookup: {
+      from: "followers",
+      localField: "_id",
+      foreignField: "following",
+      as: "following"
+    }
+  },
+  { $project: { "followers.user_id": 0, "following.following": 0 } }
+])
+{
+  _id: ObjectId("64b2270346e1b5e4dc965e7b"),
+  name: 'John Doe',
+  username: 'johndoe',
+  email: 'john.doe@example.com',
+  DOB: '1990-01-01',
+  relationship_status: 'single',
+  followers: [],
+  following: []
+}
+
+   c. Insert a new post associated with a user.
+db.posts.insertOne({
+  "user_id": ObjectId("615d2d50531ff0a03c5500a1"),
+  "content": "Hello world!",
+  "timestamp": ISODate("2023-07-15T10:00:00Z"),
+  "likes": [],
+  "comments": []
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId("64b2274a46e1b5e4dc965e7c")
+}
+   d. Retrieve a user's posts in reverse chronological order.
+db.posts.find({ "user_id": ObjectId("615d2d50531ff0a03c5500a1") }).sort({ "timestamp": -1 }).limit(1)
+{
+  _id: ObjectId("64b2274a46e1b5e4dc965e7c"),
+  user_id: ObjectId("615d2d50531ff0a03c5500a1"),
+  content: 'Hello world!',
+  timestamp: 2023-07-15T10:00:00.000Z,
+  likes: [],
+  comments: []
+}
+
+   e. Implement a query to suggest friends to a user based on common interests and connections.
+db.followers.aggregate([
+  {
+    $match: {
+      "interests": { $in: [1] }
+    }
+  },
+  {
+    $lookup: {
+      from: "profile_info",
+      localField: "id",
+      foreignField: "id",
+      as: "users"
+    }
+  },
+  {
+    $project: {
+      "users.username": 1,
+      "users.name": 1,
+      "users.email": 1,
+      "users.DOB": 1,
+      "users.relationship_status": 1
+    }
+  }
+])
+db.followers.aggregate([
+  {
+    $match: {
+      "id": { $in: [3, 5] } // Specify the desired follower IDs
+    }
+  },
+  {
+    $project: {
+      "username": 1
+    }
+  }
+])
+{
+  _id: ObjectId("64b2265d46e1b5e4dc965e5f"),
+  username: 'alicej'
+}
+{
+  _id: ObjectId("64b2265d46e1b5e4dc965e61"),
+  username: 'emilyw'
+}
+
+
+Q3. Discuss the advantages of using MongoDB's document model for storing social media data.
+ans:1.Flexible schema: MongoDB allows for a flexible schema, accommodating varying structures and content of social media posts.
+2.Scalability: MongoDB is designed for scalability, enabling social media platforms to handle large amounts of data and high traffic.
+3.High performance: MongoDB's efficient indexing and querying capabilities provide fast data retrieval, crucial for real-time updates and personalized feeds.
+4.Rich data model: MongoDB's document model allows for storing diverse social media data, including user profiles, comments, likes, and relationships.
+5.Flexibility for iterative development: MongoDB supports easy modification of data structures, facilitating agile development and reducing downtime during updates.
+6.Horizontal scalability: MongoDB's sharding capability enables horizontal scaling as data volumes grow, distributing data across multiple servers or clusters.
+7.Seamless integration with modern web technologies: MongoDB seamlessly integrates with popular web technologies used in social media platforms.
+8.Automatic sharding and load balancing: MongoDB automatically handles data distribution and load balancing, simplifying scaling operations.
+9.Easy replication and fault tolerance: MongoDB's replication features ensure data redundancy and high availability, crucial for social media platforms.
+10.Developer-friendly features: MongoDB offers a rich set of tools, drivers, and libraries, making it easy for developers to work with and build social media applications efficiently.
+
+
+
+Q4. Explain how MongoDB's replication and sharding features can help ensure high availability and scalability in a social media application.
+Ans:Replication:
+
+1.Replication provides data redundancy and high availability.
+2.Automatic failover promotes a secondary member to primary if the primary becomes unavailable.
+3.Data redundancy guards against data loss due to hardware failures or network issues.
+4.Read scalability allows replica set members to handle read operations, improving overall performance.
+
+A.Sharding:
+1.Sharding enables horizontal scaling of the database infrastructure.
+2.Data distribution partitions data across multiple shards based on a shard key.
+3.Load balancing ensures an even distribution of data and queries across shards, preventing hotspots.
+4.Elastic scaling allows adding more shards to accommodate growing data volumes and user traffic.
+
+B.Combined Benefits:
+1.High availability is achieved through automatic failover in replication, minimizing downtime.
+2.Data redundancy in replication and sharding ensures fault tolerance.
+3.Sharding enables horizontal scaling, allowing the system to handle increasing data volumes and user traffic effectively.
+4.Automatic load balancing in sharding optimizes performance and prevents resource bottlenecks.
+5.By leveraging MongoDB's replication and sharding features, a social media application can achieve continuous availability, data redundancy, and scalability. These features work together to ensure fault tolerance, handle growing user demands, and maintain a high-performance database infrastructure.
+
+-------------------------------------------------------------------------------------------------------------
+2)html/css/js
+
+**Problem**
+
+A doctor's office wanted to create a web application that would allow patients to schedule appointments, view their medical records, and communicate with their doctors. The application needed to be easy to use and accessible on mobile devices.
+
+**Solution**
+
+The application was built using HTML, CSS, and JavaScript. The HTML was used to create the basic structure of the application, the CSS was used to style the elements, and the JavaScript was used to add interactivity. The application was also made responsive so that it would look good on all screen sizes.
+
+**Results**
+
+The application was a success. Patients were able to easily schedule appointments, view their medical records, and communicate with their doctors. The application was also well-received by doctors, who found it to be a valuable tool for managing their patients.
+
+----------------------------------------------------------------------------------------------------------------------
+Find the longest substring without repeating characters.
+This is a classic data structure problem that is often asked in interviews. The problem is to find the longest substring of a given string that does not contain any repeating characters.
+
+To solve this problem, you can use a sliding window approach. The sliding window is a technique that maintains a window of characters that do not repeat. The window starts at the beginning of the string and slides one character at a time to the right. As the window slides, the algorithm keeps track of the longest substring that does not contain any repeating characters.
+ANS: Input: abcabcbb
+output
+Longest substring without repeating characters: abc
+----------------------------------------------------------------------------------------------------------------------
+Route Planner
+
+Scenario:
+You are developing a route planner application that finds the shortest path between two locations on a map. The map consists of interconnected nodes representing locations, and each node has a weight associated with it. Your task is to design an algorithm that efficiently finds the shortest path between any two given nodes.
+
+Which graph traversal algorithm(s) would you choose to implement the route planner? Explain your choice(s) and discuss their time complexity.
+
+Implement the algorithm(s) you selected in question 1 and provide a function that takes the starting and ending nodes as input and returns the shortest path between them.
+
+Discuss any limitations or potential challenges in your implementation and propose possible improvements to handle large-scale maps or dynamic updates to the map.
+ANS:output
+Shortest path: [ 'A', 'C', 'D', 'E' ]
+
+q5:sql quaries answer:
+1.SELECT hotel_name AS Hotel_name, hotel_type AS Hotel_type FROM hotel_details ORDER BY Hotel_name DESC;
+2.SELECT car_id, car_name, owner_id FROM cars WHERE car_type IN ('Hatchback', 'SUV') ORDER BY car_id;
+
