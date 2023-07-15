@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Harbinger Clinic</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="bg-primary text-white text-center py-3">
+    <h1>Harbinger Clinic</h1>
+  </header>
+  <nav class="navbar navbar-expand navbar-light bg-light">
+    <div class="container">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="schedule.html">Schedule Appointment</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="records.html">Medical Records</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="communication.html">Communication</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <main class="container mt-4">
+    <h2>Communication</h2>
+    <div>
+      <textarea id="messageInput" class="form-control mb-3" placeholder="Type your message here"></textarea>
+      <button id="sendMessageButton" class="btn btn-primary">Send Message</button>
+    </div>
+    <div id="messageBox" class="mt-4"></div>
+  </main>
+  <footer class="bg-light text-center py-3">
+    <p>&copy; 2023 Harbinger Clinic. All rights reserved.</p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const messageInput = document.getElementById('messageInput');
+      const sendMessageButton = document.getElementById('sendMessageButton');
+      const messageBox = document.getElementById('messageBox');
+      sendMessageButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const messageContent = messageInput.value.trim();
+
+        if (messageContent !== '') {
+          messageInput.value = '';
+          const messageElement = document.createElement('div');
+          messageElement.classList.add('message');
+          messageElement.textContent = messageContent;
+          messageBox.appendChild(messageElement);
+        } else {
+          alert('Please enter a message before sending.');
+        }
+      });
+    });
+  </script>
+
+  <style>
+    .message {
+      background-color: #f2f2f2;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</body>
+</html>

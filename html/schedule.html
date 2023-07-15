@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Harbinger Clinic</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="bg-primary text-white text-center py-3">
+    <h1>Harbinger Clinic</h1>
+  </header>
+  <nav class="navbar navbar-expand navbar-light bg-light">
+    <div class="container">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="schedule.html">Schedule Appointment</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="records.html">Medical Records</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="communication.html">Communication</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <main class="container mt-4">
+    <h2>Schedule Appointment</h2>
+    <form id="appointmentForm">
+      <div class="form-group">
+        <label for="nameInput">Name:</label>
+        <input type="text" class="form-control" id="nameInput" required>
+        <small id="nameWarning" class="text-danger"></small>
+      </div>
+      <div class="form-group">
+        <label for="emailInput">Email:</label>
+        <input type="email" class="form-control" id="emailInput" required>
+        <small id="emailWarning" class="text-danger"></small>
+      </div>
+      <div class="form-group">
+        <label for="dateInput">Appointment Date:</label>
+        <input type="text" class="form-control" id="dateInput" placeholder="YYYY-MM-DD" required>
+        <small id="dateWarning" class="text-danger"></small>
+      </div>
+      <div class="form-group">
+        <label for="reasonInput">Reason for Appointment:</label>
+        <textarea class="form-control" id="reasonInput" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </main>
+  <footer class="bg-light text-center py-3">
+    <p>&copy; 2023 Harbinger Clinic. All rights reserved.</p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const appointmentForm = document.getElementById('appointmentForm');
+      appointmentForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        clearWarnings();
+        const nameInput = document.getElementById('nameInput').value.trim();
+        const emailInput = document.getElementById('emailInput').value.trim();
+        const dateInput = document.getElementById('dateInput').value.trim();
+        const reasonInput = document.getElementById('reasonInput').value.trim();
+        let valid = true;
+        if (nameInput === '' || nameInput.length > 30) {
+          displayWarning('nameWarning', 'Please enter a valid name (maximum 30 characters).');
+          valid = false;
+        }
+        if (!isValidEmail(emailInput)) {
+          displayWarning('emailWarning', 'Please enter a valid email address.');
+          valid = false;
+        }
+        if (!isValidDate(dateInput)) {
+          displayWarning('dateWarning', 'Please enter a valid appointment date (YYYY-MM-DD).');
+          valid = false;
+        }
+        if (valid) {
+          appointmentForm.reset();
+          alert('Appointment scheduled successfully!');
+        }
+      });
+      function clearWarnings() {
+        const nameWarning = document.getElementById('nameWarning');
+        const emailWarning = document.getElementById('emailWarning');
+        const dateWarning = document.getElementById('dateWarning');
+        nameWarning.textContent = '';
+        emailWarning.textContent = '';
+        dateWarning.textContent = '';
+      }
+      function displayWarning(id, message) {
+        const warning = document.getElementById(id);
+        warning.textContent = message;
+      }
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+      function isValidDate(date) {
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        return dateRegex.test(date);
+      }
+    });
+  </script>
+</body>
+</html>
